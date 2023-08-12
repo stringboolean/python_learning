@@ -9,8 +9,6 @@ account = {
     'times_played': 0,
 }
 
-balance = 100
-
 def quitgame():
     print('Game Ended, someone died')
     exit()
@@ -40,11 +38,20 @@ print('2: ' + str(fighters[1].__dict__))# fighter referenced by index 1 in fight
 
 seleccted_fighter = input('Which fighter would you like to bet on? [1 or 2]: ')
 
+balance = 100
+
 print('You have selected fighter ' + seleccted_fighter + '.')
 bet = input('How much would you like to bet of your ' + str(balance) + '? ')
 
-balance = balance - int(bet)
+balance -= int(bet)
 print('Your balance is now ' + str(balance) + '.')
+
+def updateAccount():
+    if fighters[int(seleccted_fighter) - 1].health > 0:
+        balance += int(bet)
+    else:
+        balance -= int(bet)
+        print('Your balance is now ' + str(balance) + '.')
 
 def battle():
     # create skills list that will match the index of the fighters list created above
@@ -57,10 +64,12 @@ def battle():
         attacker = fighters[0] if skills[0] > skills[1] else fighters[1]
         wounded = fighters[1] if skills[0] > skills[1] else fighters[0]
         damage = random.randint(0, attacker.power)
+        # here we add 1 to the index of each fighter simply for the sake of displaying them to the user as we did on the betting menu
+        print('Fighter ' + str((fighters.index(attacker) + 1)) + ' strikes ' + str((fighters.index(wounded) + 1)) + ' for ' + str(damage) + '!')
+        # check to see if the game is over and update the balance if so before the game ends
+        if wounded.health <= 0: updateAccount()
         # call updateHealth method on the wounded fighter itself because it is part of the Fighter class
         wounded.updateHealth(damage)
-        # here we add 1 to the index of each fighter simply for the sake of displaying them to the user as we did on the betting menu
-        print('Fighter ' + str((fighters.index(attacker) + 1)) + ' strikes ' + str((fighters.index(wounded) + 1)) + ' for ' + str(damage) + ' !')
 
 while True:
     battle()
