@@ -1,19 +1,6 @@
-# adventure game
-# choices regarding survival
-# day timer, fatigue?, sleeping replenishes fatigue
-
-# tile_names = [
-#     '1'
-# ]
-
-# class MapTile:
-#     def __init__(self, name, loot, trigger) -> None:
-#         self.name = name
-#         self.loot = loot
-#         self.trigger = trigger
-
 # two opponents: health, power, skill
 import random
+
 
 account = {
     'balance': 100,
@@ -21,7 +8,9 @@ account = {
     'losses': 0,
     'times_played': 0,
 }
+
 balance = 100
+
 def quitgame():
     print('Game Ended, someone died')
     exit()
