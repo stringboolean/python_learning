@@ -36,18 +36,24 @@ fighters = [Fighter(), Fighter()]
 print('1: ' + str(fighters[0].__dict__)) # fighter referenced by index 0 in fighters
 print('2: ' + str(fighters[1].__dict__))# fighter referenced by index 1 in fighters
 
-seleccted_fighter = input('Which fighter would you like to bet on? [1 or 2]: ')
+selected_fighter = input('Which fighter would you like to bet on? [1 or 2]: ')
+while selected_fighter not in ['1', '2']:
+    print('You must select 1 or 2!')
+    selected_fighter = input('Which fighter would you like to bet on? [1 or 2]: ')
 
 balance = 100
 
-print('You have selected fighter ' + seleccted_fighter + '.')
-bet = input('How much would you like to bet of your ' + str(balance) + '? ')
+print('You have selected fighter ' + selected_fighter + '.')
+bet = input('How much would you like to bet of your ' + str(balance) + '? [$5 minimum]: $')
+while not bet.isnumeric() or int(bet) < 5:
+    print('You must bet a minimum of $5!')
+    bet = input('How much would you like to bet of your ' + str(balance) + '? [$5 minimum]: $')
 
 balance -= int(bet)
 print('Your balance is now ' + str(balance) + '.')
 
 def updateAccount():
-    if fighters[int(seleccted_fighter) - 1].health > 0:
+    if fighters[int(selected_fighter) - 1].health > 0:
         balance += int(bet)
     else:
         balance -= int(bet)
