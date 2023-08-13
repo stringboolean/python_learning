@@ -11,6 +11,7 @@ class Fighter:
         self.skill = int(random.random() * 100)
         self.winstreak = 0
         self.maxHealth = self.health
+        self.champion = False
 
     def skillRoll(self):
         return random.randint(0, self.skill)
@@ -20,6 +21,7 @@ class Fighter:
 
     def updateWins(self):
         self.winstreak += 1
+        self.champion = True
 
     def resetHealth(self):
         self.health = self.maxHealth
@@ -36,7 +38,19 @@ def updateRecord():
 
 fighters = [Fighter(generateName()), Fighter(generateName())]
 
+new_fight = True
+
 def battle():
+    global new_fight
+
+    if (new_fight):
+      print('Current Fighters:')
+      print(fighters[0].name + ': Health(' + str(fighters[0].health) + ') Power(' + str(fighters[0].power) + ') Skill(' + str(fighters[0].skill) + ')' + (' *Champ' if fighters[0].champion else ''))
+      print(fighters[1].name + ': Health(' + str(fighters[1].health) + ') Power(' + str(fighters[1].power) + ') Skill(' + str(fighters[1].skill) + ')' + (' *Champ' if fighters[1].champion else ''))
+      print()
+      input('Hit enter to begin the fight!')
+      new_fight = False
+    
     # create skills list that will match the index of the fighters list created above
     skills = []
     for f in fighters:
@@ -54,7 +68,7 @@ def battle():
         # call updateHealth method on the wounded fighter itself because it is part of the Fighter class
         wounded.updateHealth(damage)
         if wounded.health <= 0:
-            time.sleep(1)
+            time.sleep(1.5)
             print('Fight Ended, ' + attacker.name + ' has emerged victorious and ' + wounded.name + ' has been slain.')
             attacker.updateWins()
             if attacker.winstreak > record_wins:
@@ -65,7 +79,9 @@ def battle():
             attacker.resetHealth()
             fighters.remove(wounded)
             fighters.append(Fighter(generateName()))
+            new_fight = True
+            print()
         
 while True:
-    time.sleep(1)
+    time.sleep(1.5)
     battle()
