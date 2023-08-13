@@ -1,4 +1,3 @@
-# two opponents: health, power, skill
 import random
 import time
 from names import names
@@ -27,7 +26,7 @@ class Fighter:
         self.health = self.maxHealth
 
 
-def generateName():
+def generateName(exclude):
     # names list imported from names file
     return names[random.randint(0, len(names) -1)]
 
@@ -36,19 +35,23 @@ def updateRecord():
     global record_wins
     record_wins += 1
 
+# create list of fighters using the Fighter class and passing in the generateName method to provide a name for each Fighter
 fighters = [Fighter(generateName()), Fighter(generateName())]
 
+# flag used in check to print fighter information when a new fight begins
 new_fight = True
 
 def battle():
     global new_fight
 
     if (new_fight):
+      # display fighter stats at beginning of new fight
       print('Current Fighters:')
       print(fighters[0].name + ': Health(' + str(fighters[0].health) + ') Power(' + str(fighters[0].power) + ') Skill(' + str(fighters[0].skill) + ')' + (' *Champ' if fighters[0].champion else ''))
       print(fighters[1].name + ': Health(' + str(fighters[1].health) + ') Power(' + str(fighters[1].power) + ') Skill(' + str(fighters[1].skill) + ')' + (' *Champ' if fighters[1].champion else ''))
       print()
       input('Hit enter to begin the fight!')
+      # reset new_fight flag so it doesn't spam fighter stats between each skill roll
       new_fight = False
     
     # create skills list that will match the index of the fighters list created above
@@ -63,7 +66,6 @@ def battle():
         attacker = fighters[0] if skills[0] > skills[1] else fighters[1]
         wounded = fighters[1] if skills[0] > skills[1] else fighters[0]
         damage = random.randint(0, attacker.power)
-        # here we add 1 to the index of each fighter simply for the sake of displaying them to the user as we did on the betting menu
         print(attacker.name + ' strikes ' + wounded.name + ' for ' + str(damage) + '!')
         # call updateHealth method on the wounded fighter itself because it is part of the Fighter class
         wounded.updateHealth(damage)
@@ -78,7 +80,7 @@ def battle():
                 print(attacker.name + ' has ' + str(attacker.winstreak) + ' kills. The current record is ' + str(record_wins) + '.')
             attacker.resetHealth()
             fighters.remove(wounded)
-            fighters.append(Fighter(generateName()))
+            fighters.append(Fighter(generateName(attacker.name)))
             new_fight = True
             print()
         
